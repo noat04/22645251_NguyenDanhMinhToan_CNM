@@ -51,5 +51,18 @@ export const ProductRepo = {
             UpdateExpression: "SET isDeleted = :d",
             ExpressionAttributeValues: { ":d": true }
         }));
+    },
+
+    // 👇 THÊM HÀM NÀY: Trừ số lượng tồn kho
+    decreaseQuantity: async (id, amount) => {
+        await dynamoDB.send(new UpdateCommand({
+            TableName: "products", // Đảm bảo đúng tên bảng của bạn
+            Key: { id: id },
+            UpdateExpression: "SET quantity = quantity - :amount",
+            ConditionExpression: "quantity >= :amount", // Chỉ trừ nếu còn đủ hàng
+            ExpressionAttributeValues: {
+                ":amount": Number(amount)
+            }
+        }));
     }
 };

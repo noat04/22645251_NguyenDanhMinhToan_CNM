@@ -7,6 +7,8 @@ import homeRoutes from "./routes/home.routes.js";
 import logRoutes from "./routes/log.routes.js";
 import session from "express-session";
 import authRoutes from "./routes/auth.routes.js";
+import cartRoutes from "./routes/cart.routes.js";
+import orderRoutes from "./routes/order.routes.js";
 import { requireLogin, requireAdmin } from "./middlewares/auth.middleware.js";
 
 
@@ -35,6 +37,12 @@ app.set("views", "./views");
 // middleware
 app.use(express.urlencoded({ extended: true }));
 
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    // 👇 Thêm dòng này
+    res.locals.cartCount = req.session.cart ? req.session.cart.totalQuantity : 0;
+    next();
+});
 // routes
 
 // 1. Route Auth (Login/Register) phải nằm ĐẦU TIÊN và KHÔNG ĐƯỢC có middleware requireLogin
@@ -44,6 +52,8 @@ app.use("/auth", authRoutes);
 app.use("/products", requireLogin, productRoutes);
 app.use("/categories", requireLogin, requireAdmin, categoryRoutes);
 app.use("/logs", requireLogin, requireAdmin, logRoutes);
+app.use("/cart", requireLogin, cartRoutes);
+app.use("/order", requireLogin, orderRoutes); // Bắt buộc đăng nhập mới được thanh toán
 // 3. Route trang chủ (Gốc) phải nằm CUỐI CÙNG
 // Vì "/" là prefix của mọi đường dẫn, nếu để lên đầu nó sẽ "ăn" hết các request
 app.use("/", requireLogin, homeRoutes);

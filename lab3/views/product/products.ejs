@@ -28,7 +28,18 @@
                     <li class="nav-item"><a class="nav-link" href="/">Trang chủ</a></li>
                     <li class="nav-item"><a class="nav-link active" href="/products">Sản phẩm</a></li>
                     <li class="nav-item"><a class="nav-link" href="/categories">Danh mục</a></li>
+                    <% if (locals.user && user.role === 'staff') { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/cart">
+                                <i class="bi bi-cart"></i> Giỏ hàng
+                                <% if (cartCount > 0) { %>
+                                    <span class="badge bg-danger rounded-pill"><%= cartCount %></span>
+                                <% } %>
+                            </a>
+                        </li>
+                     <% } %>
                     <% if (locals.user) { %>
+
                         <li class="nav-item"><span class="nav-link text-warning">Hi, <%= user.username %> (<%= user.role %>)</span></li>
                         <li class="nav-item"><a class="nav-link" href="/auth/logout">Logout</a></li>
                     <% } %>
@@ -104,9 +115,8 @@
                                 <th>Giá bán</th>
                                 <th class="text-center">Tồn kho</th>
 
-                                <% if (locals.user && user.role === 'admin') { %>
-                                    <th class="text-center">Hành động</th>
-                                <% } %>
+                                <th class="text-center">Hành động</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -141,6 +151,13 @@
                                                 <span class="badge bg-danger rounded-pill">Hết hàng</span>
                                             <% } %>
                                         </td>
+                                          <% if (locals.user && user.role === 'staff') { %>
+                                              <td class="text-center">
+                                                    <a href="/cart/add/<%= p.id %>" class="btn btn-sm btn-outline-success">
+                                                      <i class="bi bi-cart-plus"></i> Chọn mua
+                                                  </a>
+                                              </td>
+                                           <% } %>
 
                                         <% if (locals.user && user.role === 'admin') { %>
                                             <td class="text-center">
