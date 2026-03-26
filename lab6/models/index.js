@@ -1,10 +1,9 @@
-const { dynamodb } = require("../utils/aws-helper"); // Import DynamoDB service
-const { v4: uuidv4 } = require("uuid"); // Tạo unique ID
+const { dynamodb } = require("../utils/aws-helper");
+const { v4: uuidv4 } = require("uuid");
 
-const tableName = "Products"; // Tên bảng theo yêu cầu đề bài
+const tableName = "Products";
 
 const ProductModel = {
-  // Thêm sản phẩm mới
   createProduct: async (productData) => {
     const productId = uuidv4();
     const params = {
@@ -12,9 +11,9 @@ const ProductModel = {
       Item: {
         id: productId,
         name: productData.name,
-        price: Number(productData.price), // Đảm bảo lưu dưới dạng số
-        unit_in_stock: Number(productData.unit_in_stock), // Đảm bảo lưu dưới dạng số
-        url_image: productData.url_image, // Đường dẫn ảnh sau khi upload
+        price: Number(productData.price),
+        unit_in_stock: Number(productData.unit_in_stock),
+        url_image: productData.url_image,
       },
     };
     try {
@@ -26,7 +25,6 @@ const ProductModel = {
     }
   },
 
-  // Lấy danh sách tất cả sản phẩm
   getProducts: async () => {
     const params = {
       TableName: tableName,
@@ -40,12 +38,11 @@ const ProductModel = {
     }
   },
 
-  // Cập nhật thông tin sản phẩm
   updateProduct: async (productId, productData) => {
     const params = {
       TableName: tableName,
       Key: {
-        id: productId, // Chỉ cần dùng id làm partition key
+        id: productId,
       },
       UpdateExpression: "set #n = :name, #p = :price, #u = :unit_in_stock, #img = :url_image",
       ExpressionAttributeNames: {
@@ -72,12 +69,11 @@ const ProductModel = {
     }
   },
 
-  // Xóa sản phẩm
   deleteProduct: async (productId) => {
     const params = {
       TableName: tableName,
       Key: {
-        id: productId, // Chỉ cần dùng id để xóa
+        id: productId,
       },
     };
     try {
@@ -89,7 +85,6 @@ const ProductModel = {
     }
   },
 
-  // Lấy chi tiết một sản phẩm (đã sửa từ query sang get cho tối ưu khóa chính)
   getProductById: async (productId) => {
     const params = {
       TableName: tableName,
@@ -105,11 +100,10 @@ const ProductModel = {
       throw error;
     }
   },
-  // Hàm lấy điểm cộng: Tìm kiếm sản phẩm theo tên
+
   searchProducts: async (keyword) => {
     const params = {
       TableName: tableName,
-      // Dùng contains để tìm kiếm gần đúng (nhập "áo" sẽ ra "áo thun", "áo khoác"...)
       FilterExpression: "contains(#n, :keyword)", 
       ExpressionAttributeNames: {
         "#n": "name",

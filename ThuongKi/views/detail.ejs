@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết Vé</title>
+</head>
+<body>
+    <h2>Chi tiết Vé Sự Kiện</h2>
+    <a href="/tickets">Quay lại danh sách</a>
+    <hr>
+
+    <% if(ticket.imageUrl) { %>
+        <img src="<%= ticket.imageUrl %>" alt="<%= ticket.eventName %>" style="max-height: 300px; border: 1px solid #ccc; border-radius: 5px;" />
+    <% } else { %>
+        <p><i>Chưa có ảnh sự kiện</i></p>
+    <% } %>
+
+    <h3>Sự kiện: <%= ticket.eventName %></h3>
+    <ul>
+        <li><b>Mã vé (ID):</b> <%= ticket.id %></li>
+        <li><b>Khách hàng:</b> <%= ticket.holderName %></li>
+        <li><b>Ngày diễn ra:</b> <%= ticket.eventDate %></li>
+        <li><b>Trạng thái:</b> <%= ticket.status %></li>
+        <br>
+        <li><b>Loại vé:</b> <%= ticket.category %></li>
+        <li><b>Số lượng mua:</b> <%= ticket.quantity %> vé</li>
+        <li><b>Giá gốc (1 vé):</b> <%= ticket.pricePerTicket %> VNĐ</li>
+        <li><b>Tổng tiền (Chưa giảm):</b> <%= ticket.totalAmount %> VNĐ</li>
+        
+        <li>
+            <b>Khách phải thanh toán:</b> 
+            <span style="color: red; font-size: 18px; font-weight: bold;"><%= ticket.finalAmount %> VNĐ</span> 
+        </li>
+        <li><b>Ghi chú:</b> <%= ticket.discountLabel %></li>
+    </ul>
+
+    <p>
+        <a href="/tickets/update/<%= ticket.id %>">
+            <button type="button">Sửa vé này</button>
+        </a>
+    </p>
+
+</body>
+</html>

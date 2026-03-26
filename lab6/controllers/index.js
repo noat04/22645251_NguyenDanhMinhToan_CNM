@@ -1,32 +1,25 @@
 const ProductModel = require("../models/index");
 const { deleteLocalFile } = require("../middleware/upload");
 const { validatePayload } = require("../middleware/validation");
-const fs = require("fs"); // Import thêm fs để xóa ảnh nếu validation lỗi
+const fs = require("fs");
 const ProductController = {};
 
-// 1. Hiển thị danh sách & Xử lý Tìm kiếm (Tiêu chí 3 + Điểm cộng)
 ProductController.getAll = async (req, res) => {
   try {
-    // Lấy từ khóa tìm kiếm trên thanh URL (ví dụ: /products?keyword=Ao)
     const keyword = req.query.keyword;
     let products;
 
     if (keyword) {
-      // Nếu có gõ tìm kiếm thì gọi hàm search
       products = await ProductModel.searchProducts(keyword);
     } else {
-      // Nếu không tìm kiếm thì lấy tất cả
       products = await ProductModel.getProducts();
     }
-
-    // Truyền thêm biến keyword ra giao diện để giữ lại chữ người dùng vừa gõ
     return res.render("index", { products: products, keyword: keyword });
   } catch (error) {
     console.error("Lỗi get products:", error);
     res.status(500).send("Lỗi tải danh sách sản phẩm");
   }
 };
-// 2. Xem chi tiết (Tiêu chí 7)
 ProductController.getOne = async (req, res) => {
   try {
     const { id } = req.params;
@@ -41,22 +34,18 @@ ProductController.getOne = async (req, res) => {
   }
 };
 
-// 3. Render Form Thêm sản phẩm
 ProductController.renderCreateForm = (req, res) => {
-  res.render("create"); // Gọi file views/create.ejs
+  res.render("create");
 };
 
-// 4. Xử lý Thêm sản phẩm & Upload ảnh (Tiêu chí 4)
 ProductController.createProduct = async (req, res) => {
   try {
     const { name, price, unit_in_stock } = req.body;
     let url_image = "";
 
-    // 1. GỌI HÀM KIỂM TRA DỮ LIỆU
     const validationErrors = validatePayload(req.body);
 
     if (validationErrors) {
-      // Nếu có lỗi, xóa luôn cái ảnh vừa upload lên ổ cứng (để tránh rác máy)
       if (req.file) {
         fs.unlinkSync(req.file.path);
       }

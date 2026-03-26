@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm Vé Mới</title>
+</head>
+<body>
+    <h2>Thêm Vé Sự Kiện Mới</h2>
+
+    <form action="/tickets/create" method="POST" enctype="multipart/form-data">
+        
+        <p>
+            <label for="eventName">Tên sự kiện:</label><br>
+            <input type="text" id="eventName" name="eventName" required>
+        </p>
+
+        <p>
+            <label for="holderName">Tên khách hàng:</label><br>
+            <input type="text" id="holderName" name="holderName" required>
+        </p>
+
+        <p>
+            <label for="category">Loại vé (Sẽ tự động tính giảm giá):</label><br>
+            <select id="category" name="category" required>
+                <option value="Standard">Thường (Không giảm giá)</option>
+                <option value="VIP">VIP (Giảm 10% nếu mua từ 4 vé)</option>
+                <option value="VVIP">VVIP (Giảm 15% nếu mua từ 2 vé)</option>
+            </select>
+        </p>
+
+        <p>
+            <label for="quantity">Số lượng:</label><br>
+            <input type="number" id="quantity" name="quantity" min="1" required>
+        </p>
+
+        <p>
+            <label for="pricePerTicket">Giá mỗi vé (VNĐ):</label><br>
+            <input type="number" id="pricePerTicket" name="pricePerTicket" min="0" required>
+        </p>
+
+        <p>
+            <label for="eventDate">Ngày diễn ra:</label><br>
+            <input type="date" id="eventDate" name="eventDate" required>
+        </p>
+
+        <p>
+            <label for="status">Trạng thái:</label><br>
+            <select id="status" name="status" required>
+                <option value="Upcoming">Upcoming (Sắp diễn ra)</option>
+                <option value="Sold">Sold (Đã bán)</option>
+                <option value="Cancelled">Cancelled (Đã hủy)</option>
+            </select>
+        </p>
+
+        <p>
+            <label for="imageUrl">Hình ảnh sự kiện:</label><br>
+            <input type="file" id="imageUrl" name="imageUrl" accept="image/*" required>
+        </p>
+
+        <p>
+            <button type="submit">Lưu Vé Mới</button>
+            <a href="/tickets"><button type="button">Hủy bỏ</button></a>
+        </p>
+
+    </form>
+</body>
+</html>

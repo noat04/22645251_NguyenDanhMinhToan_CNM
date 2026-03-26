@@ -1,12 +1,9 @@
-// Regex hỗ trợ chữ cái (bao gồm tiếng Việt), số và khoảng trắng
-const vnNameRegex = /^[a-zA-Z0-9\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/;
+const vnNameRegex = /^[a-zA-Z0-9]+$/;
 
-// Regex chỉ cho phép các con số (0-9)
 const numberRegex = /^[0-9]+$/;
 
 const checkEmpty = (payload) => {
     const { name, price, unit_in_stock } = payload;
-    // Kiểm tra rỗng hoặc chưa nhập
     if (!name || price === "" || unit_in_stock === "") {
         return true;
     }
@@ -38,6 +35,6 @@ module.exports = {
             return errors;
         }
 
-        return null; // Dữ liệu hoàn toàn hợp lệ
+        return null;
     },
 };
